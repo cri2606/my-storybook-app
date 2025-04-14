@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 type ButtonProps = {
     label: string
     onClick: () => void
+    disabled: boolean | null
 }
-/**
- * Componente bottone che riceve via props una label e una funzione onClick
- * @param label - Testo del bottone
- * @param onClick - Funzione da eseguire al click 
- * @returns Un bottone con la label passata come props 
- */
-export const Button: React.FC<ButtonProps> = ({label, onClick}) => {
-    return <button onClick={onClick}>{label}</button>
+
+export const Button: React.FC<ButtonProps> = ({ label, onClick, disabled = false }) => {
+    const [Disabled, setDisabled] = useState(false)
+
+    const handleClick = async () => {
+        if (disabled === null) {
+            setDisabled(true)
+            setTimeout(() => {
+                onClick()           
+                setDisabled(false)
+            }, 5000)
+        } else if (!disabled) onClick()
+    }
+    const isDisabled = disabled === null ? Disabled : disabled
+    return <button onClick={handleClick} disabled={isDisabled}>{label}</button>
 }
